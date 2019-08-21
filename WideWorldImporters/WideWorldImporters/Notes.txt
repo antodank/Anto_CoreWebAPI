@@ -1,0 +1,37 @@
+﻿https://www.codingame.com/playgrounds/35462/creating-web-api-in-asp-net-core-2-0/part-1---web-api
+
+Nuget package
+* EntityFrameworkCore.SqlServer
+* Swashbuckle.AspNetCore
+
+ENTITIES
+
+StockItems class is the representation for Warehouse.StockItems table.
+
+StockItemsConfiguration class contains the mapping for StockItems class.
+
+WideWorldImportersDbContext class is the link between database and C# code, this class handles queries and commits the changes in database and of course, another things.
+
+EXTENSIONS
+
+WideWorldImportersDbContextExtensions contains extension methods to provide linq queries.
+
+IQueryableExtensions contains extension methods to allow paging in IQueryable instances.
+
+Requests -
+
+We have the following definitions:
+
+PostStockItemsRequest
+PutStockItemsRequest
+
+Responses -
+
+ISingleResponse represents a response for a single entity.
+
+IListResponse represents a response with a list, for example all shipping to existing order without paging.
+
+IPagedResponse represents a response with pagination, for example all orders in a date range.
+
+
+http://localhost:50227/api/v1/Warehouse/StockItem
