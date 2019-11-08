@@ -10,17 +10,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using BooksApi.Models;
-using BooksApi.Services;
 
-namespace BooksApi
+using Microsoft.EntityFrameworkCore;
+using BookStoreWebAPIDBFirst.Models;
+using BookStoreWebAPIDBFirst.Models.DataManager;
+using BookStoreWebAPIDBFirst.Models.DTO;
+using BookStoreWebAPIDBFirst.Models.Repository;
+
+namespace BookStoreWebAPIDBFirst
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
         }
 
         public IConfiguration Configuration { get; }
@@ -28,18 +31,17 @@ namespace BooksApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
-                    .AddJsonOptions(options => options.UseMemberCasing())
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.Configure<BookstoreDatabaseSettings>(
-            Configuration.GetSection(nameof(BookstoreDatabaseSettings)));
+            //Added
+            services.AddMvc().AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
 
-            services.AddSingleton<IBookstoreDatabaseSettings>(sp =>
-            sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
-
-            services.AddSingleton<BookService>();
-
+            services.AddDbContext<BookStoreContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:BooksDB"]));
+            services.AddScoped<IDataRepository<Author, AuthorDto>, AuthorDataManager>();
+            services.AddScoped<IDataRepository<Book, BookDto>, BookDataManager>();
+            services.AddScoped<IDataRepository< Publisher, PublisherDto>, PublisherDataManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

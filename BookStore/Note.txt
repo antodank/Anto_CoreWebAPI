@@ -1,0 +1,27 @@
+https://code-maze.com/asp-net-core-web-api-with-ef-core-db-first-approach/
+https://code-maze.com/entity-framework-core-series/
+
+https://github.com/CodeMazeBlog/ef-db-first/tree/master/EFCoreDatabaseFirstSample
+
+dotnet new webapi -o BookStoreWebAPIDBFirst
+
+cd .\BookStoreWebAPIDBFirst\
+
+dotnet build
+
+dotnet run
+
+https://localhost:5001/api/values
+
+
+Ctrl+Shift+P, and type >nuget and press Enter:
+EntityFrameworkCore.SqlServer
+2.2.0
+
+Microsoft.EntityFrameworkCore.SqlServer -Version 2.2.0
+Microsoft.EntityFrameworkCore.Tools -Version 2.2.0
+Microsoft.EntityFrameworkCore.Design -Version 2.2.0
+
+Microsoft.EntityFrameworkCore.Proxies -Version 2.2.0
+
+dotnet ef dbcontext scaffold "Server=.;Database=BookStore;Trusted_Connection=True;User Id=sa;Password=fortuna;Integrated Security=false;" Microsoft.EntityFrameworkCore.SqlServer -o Models

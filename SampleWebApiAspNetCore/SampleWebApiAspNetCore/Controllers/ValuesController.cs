@@ -21,7 +21,7 @@ namespace SampleWebApiAspNetCore.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            return "value" + id.ToString();
         }
 
         // POST api/values

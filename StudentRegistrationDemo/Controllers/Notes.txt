@@ -1,0 +1,13 @@
+dotnet new webapi -o StudentRegistrationDemo
+
+cd StudentRegistrationDemo
+
+code .
+
+dotnet restore
+
+dotnet build
+
+dotnet run
+
+
