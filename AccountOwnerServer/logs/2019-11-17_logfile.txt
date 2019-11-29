@@ -1,0 +1,6 @@
+2019-11-17 02:03:22.7450 ERROR Something went wrong inside GetAllOwners action: Cannot open database "accountowner" requested by the login. The login failed.
+Login failed for user 'DEV-VM\Admin'.
+2019-11-17 02:04:11.3655 ERROR Something went wrong inside GetAllOwners action: Cannot open database "accountowner" requested by the login. The login failed.
+Login failed for user 'DEV-VM\Admin'.
+2019-11-17 02:15:03.4007 ERROR Something went wrong inside GetAllOwners action: Unable to cast object of type 'System.Data.SqlTypes.SqlString' to type 'System.Data.SqlTypes.SqlGuid'.
+2019-11-17 02:15:13.6850 ERROR Something went wrong inside GetAllOwners action: Unable to cast object of type 'System.Data.SqlTypes.SqlString' to type 'System.Data.SqlTypes.SqlGuid'.

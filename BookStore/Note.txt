@@ -16,7 +16,8 @@ https://localhost:5001/api/values
 
 Ctrl+Shift+P, and type >nuget and press Enter:
 EntityFrameworkCore.SqlServer
-2.2.0
+
+Install-Package Microsoft.AspNetCore.HttpOverrides -Version 2.2.0
 
 Microsoft.EntityFrameworkCore.SqlServer -Version 2.2.0
 Microsoft.EntityFrameworkCore.Tools -Version 2.2.0
@@ -25,3 +26,11 @@ Microsoft.EntityFrameworkCore.Design -Version 2.2.0
 Microsoft.EntityFrameworkCore.Proxies -Version 2.2.0
 
 dotnet ef dbcontext scaffold "Server=.;Database=BookStore;Trusted_Connection=True;User Id=sa;Password=fortuna;Integrated Security=false;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+
+
+Part 4 - 
+What is repository pattern
+How to create models and model attributes
+How to create context class and database connection
+The right way to create repository logic
+And the way to create a wrapper around your repository classes

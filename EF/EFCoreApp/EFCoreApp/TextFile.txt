@@ -1,0 +1,195 @@
+﻿Get-Package
+
+Install-Package
+
+Find-Package
+
+Uninstall-Package
+
+Update-Package
+
+Entity Framework Core is a library that allows us to access the database from our applications. 
+It is designed as an object-relational mapper (ORM) and it works by mapping the relational database to the applications database model.
+
+Create .Net Core web Application ->
+
+In PMC - 
+
+Install-Package Microsoft.EntityFrameworkCore -v 2.2.4.0
+
+Install-Package Microsoft.EntityFrameworkCore.SqlServer -v 2.2.4.0
+
+--------------------
+
+What the entity (model) class in EF Core represents
+How to provide connection string for our application
+How to create the context class and why it is of such importance to us
+Some additional information about the DbContext class
+
+
+- The model (entity) class is a class that Entity Framework Core uses for mapping to the database table.
+
+Providing the ConnectionString for EF Core in ASP.NET Core
+
+Development.json – Holds the settings related to a development environment
+Production.json – Holds the settings related to a production environment
+appsettings.json –  Holds the settings that are common to both environments
+
+best practice is to use appsettings.json 
+
+
+DbContext Class and its registration in ASP.NET Core
+
+DbContext Class  - contains information and configuration for accessing the database
+
+EF Core looks for all the public DbSet properties, inside the application’s context class, and then maps their names to the names of the tables in the database
+Thne it goes inside class which is provided in the DbSet<T> property  and maps all the public properties to the table columns in the table with the same names and types 
+
+eg public DbSet<Student> Students { get; set; }
+
+If our Entity class has any references towards other classes, EF Core would use those reference properties and create relationships in the database.
+eg
+
+We will create ApplicationContext extends from DbContext for additional configuration
+
+Registering a Context Class in the ASP.NET Core’s IOC - 
+services.AddDbContext in ConfigureServices method of startup class
+
+DbContext has three properties inside:
+
+Database – This property is responsible for the Transactions, Database Migrations/Creations and Raw SQL queries 
+ChangeTracker – This property is used to track states of the entities retrieved via the same context instance 
+Model – This property provides access to the database model that EF Core uses when connecting or creating a database.
+
+------------------------------------------------------------------------
+
+There are three approaches to configuring Entity Framework Core:
+
+By Convention - default one using property name and type , we can override other two on it
+for nullable column use - Nullable<T> or ? suffix
+
+Data Annotations - 
+Data Annotations are specific .NET attributes which we use to validate and configure the database features like composite 
+
+Table attribute - [Table(“TableName”, Schema=”SchemaName”)]
+Column attribute - [Column(“ColumnName”, Order = 1, TypeName=”nvarchar(50)”)]
+
+ eg
+[Table("Student")]
+public class Student
+{
+    [Column("StudentId")]
+    public Guid Id { get; set; }
+}
+
+Primary Key -
+	[Key]
+    [Column("StudentId")]
+    public Guid Id { get; set; }
+
+
+to Exclude Entities or Classes from the Mapping - [NotMapped]
+
+Fluent API -
+The Fluent API is a set of methods that we can use on the ModelBuilder class, which is available in the OnModelCreating method in our context (ApplicationContext) class.
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Student>()
+        .ToTable("Student");
+    modelBuilder.Entity<Student>()
+        .Property(s => s.Id)
+        .HasColumnName("StudentId");
+}
+
+Composite key -
+modelBuilder.Entity<Student>()
+     .HasKey(s => new { s.Id, s.AnotherKeyProperty });
+
+
+indexing -
+modelBuilder.Entity<Student>()
+    .HasIndex(s => s.PropertyName);
+
+Default value to field -
+modelBuilder.Entity<Student>()
+    .Property(s => s.IsRegularStudent)
+    .HasDefaultValue(true);
+
+Unique field
+modelBuilder.Entity<Student>()
+    .HasIndex(s => s.PropertyName)
+    .HasName("index_name")
+    .IsUnique();
+
+Shadow properties 
+are properties that are not defined in your .NET entity class but are defined for that entity type in the EF Core model. 
+
+ modelBuilder.Entity<Student>()
+            .Property<DateTime>("LastUpdated");
+
+by Convention is preferred one, time saving and easier
+validation should be kept in data validation. EF verifies validation before savechanges() method called
+indexes, composite keys, relationships are the things we should keep in the OnModelCreating method
+
+
+---------------------------
+
+Migrate
+
+is standard way to create or update database with EF
+First we need to create migration and then we need to apply it
+
+PMC command -
+Add-Migration MigrationName [options]
+
+dotnet CLI command -
+dotnet ef migrations add MigrationName [options]
+
+Add-Migration - command 
+
+Now we will create Entity Core library project
+add reference - 
+PM> Install-Package Microsoft.EntityFrameworkCore -Version 2.2.4
+
+PM>Install-Package Microsoft.EntityFrameworkCore.Relational -Version 2.2.4
+
+Add Entity Class Student and ApplicationContext class
+
+In PMC type  - 
+PM> Add-Migration InitialMigration
+
+Above command will Migration Folder in our project which consist three cs files.
+
+ApplicationContextModelSnapshot.cs file holds the model of the database and it is updated every time a new migration is added
+
+InitialMigration.Designer
+
+InitialMigration - This file has two methods named Up and Down
+Up method consists of commands that will be executed when we apply this migration
+Down method will execute commands when we remove this migration
+
+
+Applying  Migration - (SQL scripts, using Database.Migrate method or using command line )
+
+PM> Update-Database 
+
+Above command will create Database and table structure as per configuration
+We can observe one extra table in databse named _EFMigrationsHistoriy. 
+EF Core uses this table to track all the applied migrations
+
+To remove migration -
+PM> Remove-Migration
+
+Seed Data in Entity Framework Core
+if we want to populate some initial data through migration project then we need to add some code in 
+OnModelCreating() method in ApplicationContext
+
+or Add separate class which extends IEntityTypeConfiguration<T> 
+implement Configure() method and call it in  OnModelCreating() method
+
+In production if we want to start migration when application start
+PM> Install-Package Microsoft.ASPNetCore.Hosting -v 2.2
+
+
+-----------------------------------------------------------------------------------------------

@@ -1,0 +1,55 @@
+﻿https://code-maze.com/net-core-series/
+
+REST -
+Representational State Transfer
+its architectural style
+
+RESTful API Mean - 
+
+Client-server architecture: The complete service is comprised of the “Client” which is the front end and the “Server” which is the backend part of the whole system
+
+Stateless: All REST interactions are stateless. That is, each request contains all of the information necessary for a connector to understand the request and 
+independent of any requests
+
+Cacheable: The client should be able to store responses in a cache for the greater performance
+
+Staus Codes - 
+200 OK
+400 Bad Request
+500 Internal Server Error
+201 Created
+204 No Content
+401 Unauthorized
+403 Forbidden
+404 Not Found
+
+API writing tips -
+prefer Concrete APIs
+URI Formatting 
+Error Handling
+Status Codes
+Security
+Versioning
+
+
+the LoggerService project, add npm -
+NLog.Extensions.Logging 
+
+
+By calling services.AddSingleton will create the service the first time you request it and then every subsequent request is calling the same instance of the service.
+This means that all components are sharing the same service every time they need it. You are using the same instance always
+
+By calling services.AddScoped will create the service once per request. That means whenever we send the HTTP request towards the application, 
+a new instance of the service is created
+
+By calling services.AddTransient will create the service each time the application request it. This means that if during one request towards our application, 
+multiple components need the service, this service will be created again for every single component which needs it
+
+
+Web API routing - 
+There are two types of routings:
+
+Convention based routing and
+Attribute routing
+
+
